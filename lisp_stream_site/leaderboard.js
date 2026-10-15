@@ -8,10 +8,20 @@ function findEntries(payload) {
   if (!payload || typeof payload !== 'object') return null;
 
   // Common API response wrappers; retain only arrays that look like entry lists.
-const keys = ['leaderboards', 'data', 'leaderboard', 'entries', 'users', 'results', 'standings', 'items', 'participants'];
+  const keys = ['leaderboards', 'data', 'leaderboard', 'entries', 'users', 'results', 'standings', 'items', 'participants'];
   for (const key of keys) {
     const value = payload[key];
     if (Array.isArray(value)) return value;
+    if (value && typeof value === 'object') {
+      const nested = findEntries(value);
+      if (nested) return nested;
+    }
+  }
+
+  // Some APIs wrap period-specific entries inside objects such as
+  // { leaderboards: { weekly: [...], monthly: [...], all: [...] } }.
+  // Search remaining nested objects as a fallback.
+  for (const value of Object.values(payload)) {
     if (value && typeof value === 'object') {
       const nested = findEntries(value);
       if (nested) return nested;
