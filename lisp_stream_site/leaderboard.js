@@ -8,7 +8,7 @@ function findEntries(payload) {
   if (!payload || typeof payload !== 'object') return null;
 
   // Common API response wrappers; retain only arrays that look like entry lists.
-  const keys = ['data', 'leaderboard', 'entries', 'users', 'results', 'standings', 'items', 'participants'];
+const keys = ['leaderboards', 'data', 'leaderboard', 'entries', 'users', 'results', 'standings', 'items', 'participants'];
   for (const key of keys) {
     const value = payload[key];
     if (Array.isArray(value)) return value;
